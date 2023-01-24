@@ -35,7 +35,7 @@ browser.get('https://forum.bodybuilding.com/usercp.php')
 time.sleep(2)
 browser.find_element(By.CLASS_NAME, 'smallfont').click() # first thread in control panel
 time.sleep(2)
-browser.find_element(By.CLASS_NAME, 'username').click() # open username menu
+browser.find_elements(By.XPATH, f"//a/strong[text()='{username}']").click() # open username menu
 time.sleep(1)
 browser.find_element(By.CLASS_NAME, 'right').click() # opens post history link
 time.sleep(3)
