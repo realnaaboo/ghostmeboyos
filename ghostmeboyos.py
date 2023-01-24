@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 
 import time
 
-print('DID NOT TEST THIS CODE. LMK IF WORKS.')
+print('\nGHOST ME BOYOS 0.1\n')
 username = input('Enter username: ') 
 password = input('Enter password: ')
 
@@ -22,31 +22,34 @@ pass_field.send_keys(password)
 # Click off "want 15% off?" popup
 i = 'N'
 while i != 'Y':
-    i = input('Did you remove 15% off popup? (Y/N)')
+    i = input('\nDid you remove 15% off popup? (Y/N) ')
 
 # browser.find_element(By.ID, "form button").click()
 time.sleep(1)
+
 browser.find_element(By.CLASS_NAME, 'combined-sign-in--button').click()
 
-time.sleep(2)
-# GOTO user CP
-browser.get('https://forum.bodybuilding.com/usercp.php')
+time.sleep(5)
 
-time.sleep(2)
-browser.find_element(By.CLASS_NAME, 'smallfont').click() # first thread in control panel
-time.sleep(2)
-browser.find_element(By.XPATH, f"//a/strong[text()='{username}']").click() # open username menu
-time.sleep(1)
-browser.find_element(By.CLASS_NAME, 'right').click() # opens post history link
+dark_mode = 'https://forum.bodybuilding.com/?styleid=63'
+browser.get(dark_mode)
+id1 = browser.find_element(By.CLASS_NAME, 'welcomelink [HREF]')
+idz = id1.get_attribute('href')
+id2 = idz.split('=')
+userid = id2[1]
+post_history = f'https://forum.bodybuilding.com/search.php?do=finduser&userid={userid}&contenttype=vBForum_Post&showposts=1'
+browser.get(post_history)
+
 time.sleep(3)
-
-# thread_list = browser.find_elements(By.CLASS_NAME, 'posttitle a')
-# thread_names = browser.find_elements(By.CLASS_NAME, 'username_container h2 a')
-
 
 thread_links_elem = browser.find_elements(By.CLASS_NAME, 'posttitle [href]') # enter thread
 
+posts_deleted = 0
+page = 0
+
 while True:        
+    page += 1
+    print(f'PAGE: [{page}]')
     for count, x in enumerate(thread_links_elem, start=0):       
         # For each item in thread_list, GET 'HREF' attr
         thread_link = x.get_attribute('href')
@@ -58,15 +61,22 @@ while True:
 
         browser.execute_script(f'''window.open("{thread_link}", "_blank");''')
 
-        window_name = browser.window_handles[-1]
+        window_name = browser.window_handles[-1] # focus last tab
         browser.switch_to.window(window_name=window_name)
         time.sleep(3)
-
         browser.find_element(By.NAME, z).click()  # edits post for del
-        # time.sleep(1)
+        time.sleep(0.5)
         browser.find_element(By.ID, 'vB_Editor_QE_1_delete').click() # deletes post
-        browser.close()
-        window_name = browser.window_handles[0]
+        time.sleep(0.5)
+        browser.find_element(By.CLASS_NAME, 'dep_ctrl').click() # toggle 'delete message'
+        browser.find_element(By.ID, 'quickedit_dodelete').click() # confirm delete
+        time.sleep(3)
+        browser.close() # close thread
+        posts_deleted += 1
+        print(f'[{posts_deleted}] posts deleted')
+        
+
+        window_name = browser.window_handles[0] # focus first tab
         browser.switch_to.window(window_name=window_name)
     
     # GOTO next page if it exists
