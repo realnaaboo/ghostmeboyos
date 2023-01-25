@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os # to clear screen
 
-version = '0.3a'
+version = '0.4'
 
 def displayLogo():
     print(f'''
@@ -49,14 +49,14 @@ site = 'https://www.bodybuilding.com/combined-signin?referrer=https%3A%2F%2Fforu
 browser.get(site)
 
 try: 
-    user_field = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.NAME, 'username')))
-    if checkVisibility(user_field):
+    user_field = WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.NAME, 'username')))
+    if user_field:
         user_field.send_keys(username)
 except: pass
 
 try:
-    pass_field = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.NAME, 'password')))
-    if checkVisibility(pass_field):
+    pass_field = WebDriverWait(browser, 10).until(EC.visibility_of_element_located((By.NAME, 'password')))
+    if pass_field:
         pass_field.send_keys(password)
 except: pass
 
